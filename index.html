@@ -2,21 +2,341 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Your Name</title>
+  <title>Albert's Personal Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 100px;
-      background: #f5f5f5;
+    :root {
+      --bg: #0b0f14;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --glow: rgba(56, 189, 248, 0.35);
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top, #0f172a, var(--bg));
+      color: var(--text);
+      animation: pageFade 0.8s ease-out forwards;
+    }
+
+    @keyframes pageFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        position:sticky;
+        top: 120px;
+        left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: rgba(17, 24, 39, 0.85);
+        padding: 14px 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.08);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        transition: top 0.3s ease;
+        max-width: 110px;
+    }
+
+    .sidebar a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .sidebar a:hover {
+      background: rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 12px var(--glow);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      margin-left: 140px;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #111827, #0b1220);
+      border-radius: 14px;
+      padding: 26px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      animation: cardIn 0.8s ease forwards;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      color: var(--accent);
+      text-shadow: 0 0 8px var(--glow);
+      text-decoration: underline;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 25px var(--glow);
+    }
+
     h1 {
-      color: #333;
+      font-size: 30px;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 14px;
+      color: var(--accent);
+    }
+
+    h3 {
+      margin: 10px 0 4px;
+      font-size: 16px;
+    }
+
+    p {
+      margin: 6px 0;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .subtitle {
+      color: #cbd5f5;
+      font-size: 15px;
+    }
+
+    .section-item {
+      margin-bottom: 18px;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skills span {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.08);
+      color: var(--accent);
+      font-size: 14px;
+      border: 1px solid rgba(56,189,248,0.25);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin: 50px 0 20px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .container {
+        margin-left: auto;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Hello, I’m Your Name 👋</h1>
-  <p>Welcome to my GitHub Pages website.</p>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="card" id="hero">
+      <h1>Albert Chang</h1>
+      <p class="subtitle">3x Intern @ Amazon · MS Student in NLP @ UCSC</p>
+      <p>📍 Cupertino, CA · 📧 albertchang96@gmail.com · 🔗 <a href="https://www.linkedin.com/in/achang2115/" target="_blank">LinkedIn</a></p>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="card" id="about">
+      <h2>About</h2>
+      <p>
+        Hello, my name is Albert, and I am a first-year Natural Language Processing M.S. major at UC Santa Cruz. I am interested in learning and utilizing AI and machine learning in the real world. I am looking for full-time jobs or internships for 2026. Feel free to contact me by email!
+      </p>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="card" id="education">
+      <h2>Education</h2>
+
+      <div class="section-item">
+        <h3>University of California, Santa Cruz</h3>
+        <p class="subtitle">Master's of Science · Natural Language Processing</p>
+        <p>Sept 2025 - Dec 2026</p>
+      </div>
+
+      <div class="section-item">
+        <h3>University of California, Santa Cruz</h3>
+        <p class="subtitle">Bachelor's of Science · Computer Science</p>
+        <p>Sept 2022 - June 2025</p>
+      </div>
+
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="card" id="experience">
+      <h2>Experience</h2>
+
+      <div class="section-item">
+        <h3>Hardware Development Engineer Intern – Amazon</h3>
+        <p class="subtitle">June 2025 - September 2025<br>
+            Hawthorne, CA</p>
+        <p>
+          - Developed an application that integrates with low-power displays and Ring device connectivity.<br>
+          - Automated a cost calculator for 3D models based on dimensions and materials, which utilized Amazon Q to determine the complexity of the item and additional details for pricing.
+        </p>
+      </div>
+
+      <div class="section-item">
+        <h3>Research Assistant – University of California, Santa Cruz</h3>
+        <p class="subtitle">Feb 2024 - December 2024<br>
+            Santa Cruz, CA</p>
+        <p>
+          - Led by Professor Yi Zhang and post-graduate student Jeshwanth Bheemanpally on developing an AI agent, contributing to the design and implementation of key features.<br>
+          - Created web-based controls and an Android application for testing and demoing the agent, ensuring seamless user experience across platforms.<br>
+          - Developed and tested a mobile agent.
+        </p>
+      </div>
+
+      <div class="section-item">
+        <h3>Hardware Development Engineer Intern – Amazon</h3>
+        <p class="subtitle">June 2024 - September 2024<br>
+            Sunnyvale, CA</p>
+        <p>
+          - Creating an online listening training application that will train users how to identify changed audio with different filters.<br>
+          - Utilized full stack development, audio filtering, and AWS skills to create this internal web application.<br>
+          - Worked in the audio hardware team to have better listeners.
+        </p>
+      </div>
+
+      <div class="section-item">
+        <h3>Hardware Development Engineer Intern – Amazon</h3>
+        <p class="subtitle">June 2023 - September 2023<br>
+            Sunnyvale, CA</p>
+        <p>
+          - Worked on automating an audio measurement process that collects data from the frequency response of an Amazon Alexa device<br>
+          - Able to help save setup and measurement time from 1 hour to only 10 minutes<br>
+          - Mainly worked on the software field of the project, including sound analysis, communication with two Raspberry Pi computers, communicating a Raspberry Pi with an Amazon Alexa device, and coding for robotics.
+        </p>
+      </div>
+
+    </div>
+
+
+    <!-- PROJECTS -->
+    <div class="card" id="projects">
+    <h2>Projects</h2>
+
+    <div class="section-item">
+        <h3>Detecting Machine-Generated Code with Multiple Programming Languages, Generators, and Application Scenarios</h3>
+        <p class="subtitle">Python, PyTorch, HuggingFace, Natural Language Processing</p>
+        <p>
+        The objective is to create a system that can detect machine-generated code in various situations by evaluating its capacity to generalize to new languages, different generator types, and diverse coding contexts. Used a GraphCodeBert model as the baseline model for the approach.
+        </p>
+        <p>
+        🔗 <a href="https://github.com/ryanokimoto/detecting-machine-generated-code" target="_blank">GitHub</a>
+        </p>
+    </div>
+
+    <div class="section-item">
+        <h3>Banana Roll Call</h3>
+        <p class="subtitle">Typescript, React, Expo.io, Python, Flask, SQL</p>
+        <p>
+        This app tracks students' attendance by requiring students to type in a live code and tracks how far the student is from the classroom. The project was developed in CruzHacks 2025.
+        </p>
+        <p>
+        🔗 <a href="https://devpost.com/software/banana-roll-call" target="_blank">DevPost</a>
+        </p>
+    </div>
+
+    <div class="section-item">
+        <h3>Toxicity Classification</h3>
+        <p class="subtitle">Natural Language Processing, PyTorch, BERT, NumPy, TensorFlow, LSTM, Keras</p>
+        <p>
+        Designed a couple models that classifies whether a comment was toxic and has bias against certain group identities. Developed two solutions: GloVe embeddings with LSTM and BERT encoder with POS tagging. Based on the Kaggle competition Jigsaw Unintended Bias in Toxicity Classification.
+        </p>
+        <p>
+        🔗 <a href="https://github.com/mpatel17-ucsc/CSE-143-Project-Fall-2024" target="_blank">GitHub</a>
+        </p>
+    </div>
+
+    </div>
+
+
+    <!-- SKILLS -->
+    <div class="card" id="skills">
+      <h2>Skills</h2>
+      <div class="skills">
+        <span>Python</span>
+        <span>PyTorch</span>
+        <span>Natural Language Processing</span>
+        <span>Full Stack Development</span>
+        <span>Java</span>
+        <span>JavaScript</span>
+        <span>Typescript</span>
+        <span>HTML</span>
+        <span>CSS</span>
+        <span>React</span>
+        <span>C Programming</span>
+        <span>C++</span>
+      </div>
+    </div>
+
+    <footer>
+      © 2026 Your Name · GitHub Pages
+    </footer>
+
+  </div>
+
 </body>
 </html>
