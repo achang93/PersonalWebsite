@@ -2,341 +2,900 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Albert's Personal Website</title>
+  <title>Albert Chang</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0b0f14;
-      --card: #111827;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --accent: #38bdf8;
-      --glow: rgba(56, 189, 248, 0.35);
+      --bg: #1a1f17;
+      --surface: #171b14;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f5ed;
+      --muted: #a3b0a0;
+      --accent: #9ed4b2;
+      --accent-dim: rgba(136,184,154,0.10);
+      --accent-marquee: #2e3d32;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: radial-gradient(circle at top, #0f172a, var(--bg));
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
       color: var(--text);
-      animation: pageFade 0.8s ease-out forwards;
+      font-size: 18px;
+      overflow-x: hidden;
+      cursor: none;
     }
 
-    @keyframes pageFade {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed;
+      width: 9px; height: 9px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 34px; height: 34px;
+      border: 1px solid rgba(136,184,154,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
     }
 
-    /* SIDEBAR */
-    .sidebar {
-        position:sticky;
-        top: 120px;
-        left: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        background: rgba(17, 24, 39, 0.85);
-        padding: 14px 16px;
-        border-radius: 16px;
-        border: 1px solid rgba(255,255,255,0.08);
-        backdrop-filter: blur(10px);
-        z-index: 1000;
-        transition: top 0.3s ease;
-        max-width: 110px;
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 44px;
+      background: rgba(26, 31, 23, 0.7);
+      backdrop-filter: blur(8px);
     }
 
-    .sidebar a {
-      color: #ffffff;
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.15em;
       text-decoration: none;
-      font-size: 14px;
-      padding: 6px 10px;
-      border-radius: 8px;
-      transition: background 0.25s ease, box-shadow 0.25s ease;
+      display: inline-block;
+      
+      /* Liquid Gradient Effect */
+      background: linear-gradient(
+        to right, 
+        var(--text) 20%, 
+        var(--accent) 40%, 
+        var(--accent) 60%, 
+        var(--text) 80%
+      );
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 4s linear infinite;
     }
 
-    .sidebar a:hover {
-      background: rgba(56, 189, 248, 0.15);
-      box-shadow: 0 0 12px var(--glow);
+    @keyframes shine {
+      to { background-position: 200% center; }
     }
 
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      margin-left: 140px;
-      padding: 0 16px;
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
     }
 
-    .card {
-      background: linear-gradient(180deg, #111827, #0b1220);
-      border-radius: 14px;
-      padding: 26px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
-      animation: cardIn 0.8s ease forwards;
-    }
-
-    @keyframes cardIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    a {
-      color: #ffffff;
-      text-decoration: none;
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
       font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
     }
 
-    a:hover {
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-text {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(160px, 26vw, 360px);
+      color: rgba(255,255,255,0.014);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
       color: var(--accent);
-      text-shadow: 0 0 8px var(--glow);
-      text-decoration: underline;
+      margin-bottom: 22px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp .8s .15s forwards;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 25px var(--glow);
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(86px, 15vw, 200px);
+      line-height: 0.87;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeUp .9s .3s forwards;
     }
 
-    h1 {
-      font-size: 30px;
-      margin: 0;
+    .hero-name .outline {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(232,237,228,0.18);
     }
 
-    h2 {
-      font-size: 20px;
-      margin-bottom: 14px;
-      color: var(--accent);
+    .hero-bottom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      margin-top: 40px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp .8s .5s forwards;
     }
 
-    h3 {
-      margin: 10px 0 4px;
-      font-size: 16px;
-    }
-
-    p {
-      margin: 6px 0;
-      line-height: 1.6;
+    .hero-desc {
+      max-width: 380px;
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.75;
       color: var(--muted);
     }
 
-    .subtitle {
-      color: #cbd5f5;
-      font-size: 15px;
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 15px 30px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+      flex-shrink: 0;
     }
 
-    .section-item {
-      margin-bottom: 18px;
+    .hero-cta:hover { background: #a0cdb0; transform: scale(1.03); }
+
+    .scroll-line {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      width: 1px;
+      height: 55px;
+      background: linear-gradient(to bottom, transparent, var(--accent));
+      animation: pulse 2.5s infinite;
     }
 
-    .skills {
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+    @keyframes pulse { 0%,100%{opacity:.2} 50%{opacity:.8} }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 100px 44px;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 28px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 52px;
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.3;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 7vw, 90px);
+      line-height: 0.92;
+      color: var(--text);
+    }
+
+    .about-headline em { color: var(--accent); font-style: normal; }
+
+    .about-body {
+      font-size: 19px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .about-body strong { color: var(--text); font-weight: 500; }
+
+    .contact-chips {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
       gap: 10px;
     }
 
-    .skills span {
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.08);
-      color: var(--accent);
-      font-size: 14px;
-      border: 1px solid rgba(56,189,248,0.25);
-    }
-
-    footer {
-      text-align: center;
+    .contact-chips a {
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
       color: var(--muted);
-      font-size: 13px;
-      margin: 50px 0 20px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: color .2s;
     }
 
-    @media (max-width: 768px) {
-      .sidebar {
-        display: none;
-      }
-      .container {
-        margin-left: auto;
-      }
+    .contact-chips a:hover { color: var(--accent); }
+    .contact-chips a::before { content: '→'; color: var(--accent); font-size: 11px; }
+
+    /* ── STATS ── */
+    .stats-band {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+    }
+
+    .stat-item {
+      padding: 52px 44px;
+      border-right: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .4s ease;
+    }
+
+    .stat-item:hover::after { transform: scaleX(1); }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 7vw, 96px);
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .stat-number sup { font-size:.45em; vertical-align:super; color: var(--accent); }
+
+    .stat-label {
+      margin-top: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── EDUCATION ── */
+    .edu-item {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 0 36px;
+      align-items: center;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--border);
+      transition: background .2s, padding .2s, margin .2s;
+    }
+
+    .edu-item:first-child { border-top: 1px solid var(--border); }
+
+    .edu-item:hover {
+      background: var(--surface);
+      margin: 0 -44px;
+      padding-left: 44px;
+      padding-right: 44px;
+    }
+
+    .edu-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      line-height: 1.8;
+    }
+
+    .edu-school {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 25px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .edu-degree { font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 22px;}
+
+    .edu-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(136,184,154,0.3);
+      border-radius: 2px;
+      padding: 5px 12px;
+      white-space: nowrap;
+    }
+
+    /* ── EXPERIENCE ── */
+    .exp-item {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 0 52px;
+      padding: 52px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-item:first-child { border-top: 1px solid var(--border); }
+    .exp-item:last-child { border-bottom: none; }
+
+    .exp-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      line-height: 1.9;
+      padding-top: 8px;
+    }
+
+    .exp-role {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .exp-company {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 22px;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .exp-bullets li {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .exp-bullets li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      opacity: 0.55;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .project-card {
+      background: var(--bg);
+      padding: 34px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: background .25s;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s ease;
+    }
+
+    .project-card:hover { background: var(--surface); }
+    .project-card:hover::before { transform: scaleX(1); }
+
+    .project-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      opacity: 0.55;
+      margin-bottom: 18px;
+    }
+
+    .project-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 23px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 3px 8px;
+    }
+
+    .project-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap .2s;
+    }
+
+    .project-link:hover { gap: 10px; }
+
+    /* ── SKILLS ── */
+    .skills-row { margin-bottom: 40px; }
+
+    .skills-row-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .skills-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .skill-pill {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 8px 16px;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+
+    .skill-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.06em;
+      color: rgba(232,237,228,0.08);
+    }
+
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 20px; }
+      #hero { padding: 0 20px 52px; }
+      .section { padding: 72px 20px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .stats-band { grid-template-columns: repeat(2,1fr); }
+      .stat-item { border-bottom: 1px solid var(--border); }
+      .edu-item { grid-template-columns: 1fr; gap: 8px; }
+      .edu-item:hover { margin:0; padding-left:0; padding-right:0; }
+      .exp-item { grid-template-columns: 1fr; gap: 12px; }
+      .projects-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 32px 20px; flex-direction: column; gap: 10px; }
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .hero-bottom { flex-direction: column; gap: 24px; align-items: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SIDEBAR -->
-  <nav class="sidebar">
-    <a href="#hero">Home</a>
-    <a href="#about">About</a>
-    <a href="#education">Education</a>
-    <a href="#experience">Experience</a>
-    <a href="#projects">Projects</a>
-    <a href="#skills">Skills</a>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="ring"></div>
+
+  <nav>
+    <a class="nav-logo" href="#hero">AC</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+    </ul>
   </nav>
 
-  <div class="container">
-
-    <!-- HERO -->
-    <div class="card" id="hero">
-      <h1>Albert Chang</h1>
-      <p class="subtitle">3x Intern @ Amazon · MS Student in NLP @ UCSC</p>
-      <p>📍 Cupertino, CA · 📧 albertchang96@gmail.com · 🔗 <a href="https://www.linkedin.com/in/achang2115/" target="_blank">LinkedIn</a></p>
+  <section id="hero">
+    <div class="hero-name">
+      Albert
+      <span class="outline">Chang</span>
     </div>
-
-    <!-- ABOUT -->
-    <div class="card" id="about">
-      <h2>About</h2>
-      <p>
-        Hello, my name is Albert, and I am a first-year Natural Language Processing M.S. major at UC Santa Cruz. I am interested in learning and utilizing AI and machine learning in the real world. I am looking for full-time jobs or internships for 2026. Feel free to contact me by email!
-      </p>
+    <div class="hero-bottom">
+      <p class="hero-desc">3× Intern @ Amazon · MS Student in NLP @ UCSC<br>📍 Cupertino, CA<br> 📧 albertchang96@gmail.com</p>
+      <a class="hero-cta" href="mailto:albertchang96@gmail.com">Get in touch →</a>
     </div>
+    <div class="scroll-line"></div>
+  </section>
 
-    <!-- EDUCATION -->
-    <div class="card" id="education">
-      <h2>Education</h2>
-
-      <div class="section-item">
-        <h3>University of California, Santa Cruz</h3>
-        <p class="subtitle">Master's of Science · Natural Language Processing</p>
-        <p>Sept 2025 - Dec 2026</p>
+  <section class="section" id="about">
+    <div class="section-label">About</div>
+    <div class="about-grid reveal">
+      <div class="about-headline">
+        Building<br>the <em>future</em><br>with AI.
       </div>
-
-      <div class="section-item">
-        <h3>University of California, Santa Cruz</h3>
-        <p class="subtitle">Bachelor's of Science · Computer Science</p>
-        <p>Sept 2022 - June 2025</p>
-      </div>
-
-    </div>
-
-    <!-- EXPERIENCE -->
-    <div class="card" id="experience">
-      <h2>Experience</h2>
-
-      <div class="section-item">
-        <h3>Hardware Development Engineer Intern – Amazon</h3>
-        <p class="subtitle">June 2025 - September 2025<br>
-            Hawthorne, CA</p>
-        <p>
-          - Developed an application that integrates with low-power displays and Ring device connectivity.<br>
-          - Automated a cost calculator for 3D models based on dimensions and materials, which utilized Amazon Q to determine the complexity of the item and additional details for pricing.
+      <div>
+        <p class="about-body">
+          Hello, my name is <strong>Albert</strong>, and I am a first-year Natural Language Processing M.S. major at UC Santa Cruz, and did my undergraduate degree in Computer Science at UC Santa Cruz as well. Throuhgout my academic journey, I have gained experience in various aspects of software development and research, and am interested in learning and utilizing AI and machine learning in the real world, specifically in the areas of NLP and computer vision. Feel free to contact me by email!
         </p>
-      </div>
-
-      <div class="section-item">
-        <h3>Research Assistant – University of California, Santa Cruz</h3>
-        <p class="subtitle">Feb 2024 - December 2024<br>
-            Santa Cruz, CA</p>
-        <p>
-          - Led by Professor Yi Zhang and post-graduate student Jeshwanth Bheemanpally on developing an AI agent, contributing to the design and implementation of key features.<br>
-          - Created web-based controls and an Android application for testing and demoing the agent, ensuring seamless user experience across platforms.<br>
-          - Developed and tested a mobile agent.
-        </p>
-      </div>
-
-      <div class="section-item">
-        <h3>Hardware Development Engineer Intern – Amazon</h3>
-        <p class="subtitle">June 2024 - September 2024<br>
-            Sunnyvale, CA</p>
-        <p>
-          - Creating an online listening training application that will train users how to identify changed audio with different filters.<br>
-          - Utilized full stack development, audio filtering, and AWS skills to create this internal web application.<br>
-          - Worked in the audio hardware team to have better listeners.
-        </p>
-      </div>
-
-      <div class="section-item">
-        <h3>Hardware Development Engineer Intern – Amazon</h3>
-        <p class="subtitle">June 2023 - September 2023<br>
-            Sunnyvale, CA</p>
-        <p>
-          - Worked on automating an audio measurement process that collects data from the frequency response of an Amazon Alexa device<br>
-          - Able to help save setup and measurement time from 1 hour to only 10 minutes<br>
-          - Mainly worked on the software field of the project, including sound analysis, communication with two Raspberry Pi computers, communicating a Raspberry Pi with an Amazon Alexa device, and coding for robotics.
-        </p>
-      </div>
-
-    </div>
-
-
-    <!-- PROJECTS -->
-    <div class="card" id="projects">
-    <h2>Projects</h2>
-
-    <div class="section-item">
-        <h3>Detecting Machine-Generated Code with Multiple Programming Languages, Generators, and Application Scenarios</h3>
-        <p class="subtitle">Python, PyTorch, HuggingFace, Natural Language Processing</p>
-        <p>
-        The objective is to create a system that can detect machine-generated code in various situations by evaluating its capacity to generalize to new languages, different generator types, and diverse coding contexts. Used a GraphCodeBert model as the baseline model for the approach.
-        </p>
-        <p>
-        🔗 <a href="https://github.com/ryanokimoto/detecting-machine-generated-code" target="_blank">GitHub</a>
-        </p>
-    </div>
-
-    <div class="section-item">
-        <h3>Banana Roll Call</h3>
-        <p class="subtitle">Typescript, React, Expo.io, Python, Flask, SQL</p>
-        <p>
-        This app tracks students' attendance by requiring students to type in a live code and tracks how far the student is from the classroom. The project was developed in CruzHacks 2025.
-        </p>
-        <p>
-        🔗 <a href="https://devpost.com/software/banana-roll-call" target="_blank">DevPost</a>
-        </p>
-    </div>
-
-    <div class="section-item">
-        <h3>Toxicity Classification</h3>
-        <p class="subtitle">Natural Language Processing, PyTorch, BERT, NumPy, TensorFlow, LSTM, Keras</p>
-        <p>
-        Designed a couple models that classifies whether a comment was toxic and has bias against certain group identities. Developed two solutions: GloVe embeddings with LSTM and BERT encoder with POS tagging. Based on the Kaggle competition Jigsaw Unintended Bias in Toxicity Classification.
-        </p>
-        <p>
-        🔗 <a href="https://github.com/mpatel17-ucsc/CSE-143-Project-Fall-2024" target="_blank">GitHub</a>
-        </p>
-    </div>
-
-    </div>
-
-
-    <!-- SKILLS -->
-    <div class="card" id="skills">
-      <h2>Skills</h2>
-      <div class="skills">
-        <span>Python</span>
-        <span>PyTorch</span>
-        <span>Natural Language Processing</span>
-        <span>Full Stack Development</span>
-        <span>Java</span>
-        <span>JavaScript</span>
-        <span>Typescript</span>
-        <span>HTML</span>
-        <span>CSS</span>
-        <span>React</span>
-        <span>C Programming</span>
-        <span>C++</span>
+        <div class="contact-chips">
+          <a href="mailto:albertchang96@gmail.com">albertchang96@gmail.com</a>
+          <a href="https://www.linkedin.com/in/achang2115/" target="_blank">linkedin.com/in/achang2115</a>
+          <a href="https://github.com/achang93" target="_blank">github.com/achang93</a>
+        </div>
       </div>
     </div>
+  </section>
 
-    <footer>
-      © 2026 Your Name · GitHub Pages
-    </footer>
-
+  <div class="stats-band">
+    <div class="stat-item reveal">
+      <div class="stat-number">3<sup>×</sup></div>
+      <div class="stat-label">Amazon Intern</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">MS</div>
+      <div class="stat-label">NLP · UCSC</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">6<sup>+</sup></div>
+      <div class="stat-label">Projects Built</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">'26</div>
+      <div class="stat-label">Available</div>
+    </div>
   </div>
+
+  <section class="section" id="education">
+    <div class="section-label">Education</div>
+
+    <div class="edu-item reveal">
+      <div class="edu-year">Sept 2025 —<br>Dec 2026</div>
+      <div>
+        <div class="edu-school">University of California, Santa Cruz</div>
+        <div class="edu-degree">Master of Science in Natural Language Processing</div>
+        <div class="edu-coursework"><br>
+          <strong>Relevant Coursework:</strong>
+          Deep Learning for Natural Language Processing, Data Science and Machine Learning Fundamentals, Conversational Agents, Advanced Machine Learning for Natural Language Processing
+        </div>
+      </div>
+      <div class="edu-badge">In Progress</div>
+    </div>
+
+    <div class="edu-item reveal">
+      <div class="edu-year">Sept 2022 —<br>Jun 2025</div>
+      <div>
+        <div class="edu-school">University of California, Santa Cruz</div>
+        <div class="edu-degree">Bachelor of Science in Computer Science</div>
+        <div class="edu-coursework"><br>
+          <strong>Relevant Coursework:</strong>
+          Machine Learning and Data Mining, Introduction to Natural Language Processing, Introduction to Data Structures and Algorithms, Computational Models, Programming Abstractions: Python, Computer Systems and C Programming
+        </div>
+      </div>
+      <div class="edu-badge">Completed</div>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="section-label">Experience</div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">June 2025 –<br>September 2025<br><br>Hawthorne, CA</div>
+      <div>
+        <div class="exp-role">Hardware Development Engineer Intern</div>
+        <div class="exp-company">Amazon</div>
+        <ul class="exp-bullets">
+          <li>Developed an application that integrates with low-power displays and Ring device connectivity.</li>
+          <li>Automated a cost calculator for 3D models based on dimensions and materials, which utilized Amazon Q to determine the complexity of the item and additional details for pricing.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">Feb 2024 –<br>December 2024<br><br>Santa Cruz, CA</div>
+      <div>
+        <div class="exp-role">Research Assistant</div>
+        <div class="exp-company">University of California, Santa Cruz</div>
+        <ul class="exp-bullets">
+          <li>Led by Professor Yi Zhang and post-graduate student Jeshwanth Bheemanpally on developing an AI agent, contributing to the design and implementation of key features.</li>
+          <li>Created web-based controls and an Android application for testing and demoing the agent, ensuring seamless user experience across platforms.</li>
+          <li>Developed and tested a mobile agent.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">June 2024 –<br>September 2024<br><br>Sunnyvale, CA</div>
+      <div>
+        <div class="exp-role">Hardware Development Engineer Intern</div>
+        <div class="exp-company">Amazon</div>
+        <ul class="exp-bullets">
+          <li>Creating an online listening training application that will train users how to identify changed audio with different filters.</li>
+          <li>Utilized full stack development, audio filtering, and AWS skills to create this internal web application.</li>
+          <li>Worked in the audio hardware team to have better listeners.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">June 2023 –<br>September 2023<br><br>Sunnyvale, CA</div>
+      <div>
+        <div class="exp-role">Hardware Development Engineer Intern</div>
+        <div class="exp-company">Amazon</div>
+        <ul class="exp-bullets">
+          <li>Worked on automating an audio measurement process that collects data from the frequency response of an Amazon Alexa device.</li>
+          <li>Able to help save setup and measurement time from 1 hour to only 10 minutes.</li>
+          <li>Mainly worked on the software field of the project, including sound analysis, communication with two Raspberry Pi computers, communicating a Raspberry Pi with an Amazon Alexa device, and coding for robotics.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects">
+    <div class="section-label">Projects</div>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-num">01</div>
+        <div class="project-name">Captioning Model for Clinical X-Ray Images</div>
+        <p class="project-desc">Developed a pipeline that converts X-Rays, specifically in the chest region, into captions. Experimented with many different vision language models, such as CLIP, BLIP, SigLip, and more, to see which model can achieve the best captioning performance.</p>
+        <div class="project-tags"><span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">HuggingFace</span><span class="tag">NLP</span><span class="tag">VLMs</span></div>
+        <a class="project-link" href="https://github.com/achang93/XrayToCaption" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">02</div>
+        <div class="project-name">AI Fitness Agent Fitness Tracker</div>
+        <p class="project-desc">Developed an AI agentic system that can help you in your fitness journey. Includes features such as scheduling, an intensity tracker, a form checker, an equipment scanner, and a workout recommender. Tracks your intensity and updates after each workout to recommend exercises and scheduling.</p>
+        <div class="project-tags"><span class="tag">Python</span><span class="tag">AI Agents</span><span class="tag">PyTorch</span><span class="tag">HuggingFace</span><span class="tag">RAG</span></div>
+        <a class="project-link" href="https://github.com/naalpere17/AIFitnessAgent" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">03</div>
+        <div class="project-name">Banana Roll Call</div>
+        <p class="project-desc">This app tracks students' attendance by requiring students to type in a live code and tracks how far the student is from the classroom. The project was developed in CruzHacks 2025.</p>
+        <div class="project-tags"><span class="tag">Typescript</span><span class="tag">React</span><span class="tag">Expo.io</span><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">SQL</span></div>
+        <a class="project-link" href="https://devpost.com/software/banana-roll-call" target="_blank">View on DevPost →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">04</div>
+        <div class="project-name">Toxicity Classification</div>
+        <p class="project-desc">Designed a couple models that classifies whether a comment was toxic and has bias against certain group identities. Developed two solutions: GloVe embeddings with LSTM and BERT encoder with POS tagging. Based on the Kaggle competition Jigsaw Unintended Bias in Toxicity Classification.</p>
+        <div class="project-tags"><span class="tag">NLP</span><span class="tag">PyTorch</span><span class="tag">BERT</span><span class="tag">NumPy</span><span class="tag">TensorFlow</span><span class="tag">LSTM</span><span class="tag">Keras</span></div>
+        <a class="project-link" href="https://github.com/mpatel17-ucsc/CSE-143-Project-Fall-2024" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">05</div>
+        <div class="project-name">UCSC Location Busy Tracker</div>
+        <p class="project-desc">Measures the busyness of people in a given location in UCSC. Shows hours of operation, if it is currently open, and how busy it is currently. Integrated the Google Maps API to gather information using each location's place ID. UI created with Kivy — just click on the location and get the most recent data.</p>
+        <div class="project-tags"><span class="tag">Python</span><span class="tag">Kivy</span><span class="tag">Google Maps API</span><span class="tag">Full-stack</span></div>
+        <a class="project-link" href="https://github.com/achang93/UCSC_Location_Busy_Tracker" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">06</div>
+        <div class="project-name">Object Detection with Deep Learning on Raspberry Pi</div>
+        <p class="project-desc">This project is about how we can make a Raspberry Pi detect objects and identify what objects it is. The Raspberry Pi learns to identify the object by training with many different images. Once it can predict images with accuracy and precision, the model can then be tested in real-time.</p>
+        <div class="project-tags"><span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">Raspberry Pi</span><span class="tag">Computer Vision</span><span class="tag">Object Detection</span></div>
+        <a class="project-link" href="https://projects.bluestampengineering.com/student-projects/albertc/" target="_blank">View Website →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="skills">
+    <div class="section-label">Skills</div>
+
+    <div class="skills-row reveal">
+      <div class="skills-row-label">Programming Languages</div>
+      <div class="skills-pills">
+        <div class="skill-pill">Python</div><div class="skill-pill">Java</div><div class="skill-pill">JavaScript</div><div class="skill-pill">Typescript</div><div class="skill-pill">C Programming</div><div class="skill-pill">C++</div><div class="skill-pill">HTML</div><div class="skill-pill">RISC-V</div><div class="skill-pill">LaTeX</div>
+      </div>
+    </div>
+
+    <div class="skills-row reveal">
+      <div class="skills-row-label">Skills</div>
+      <div class="skills-pills">
+        <div class="skill-pill">React</div><div class="skill-pill">Node.js</div><div class="skill-pill">PyTorch</div><div class="skill-pill">NumPy</div><div class="skill-pill">AI Agents</div><div class="skill-pill">Vision Language Models</div><div class="skill-pill">Robotics Building</div><div class="skill-pill">Raspberry Pi</div><div class="skill-pill">Linux</div><div class="skill-pill">ADB</div><div class="skill-pill">AWS</div><div class="skill-pill">Full Stack Development</div><div class="skill-pill">Google API</div><div class="skill-pill">Audio filtering</div><div class="skill-pill">Audio processing</div><div class="skill-pill">Flask</div><div class="skill-pill">Tensorflow</div><div class="skill-pill">Amazon Sidewalk</div><div class="skill-pill">Amazon Q</div><div class="skill-pill">Image processing</div><div class="skill-pill">Natural language processing</div><div class="skill-pill">Machine learning</div><div class="skill-pill">Deep Learning</div><div class="skill-pill">Amazon S3</div><div class="skill-pill">DynamoDB</div><div class="skill-pill">SQL</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-name">Albert Chang</div>
+    <div class="footer-copy">© 2026 Albert Chang · GitHub Pages</div>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('ring');
+    let mx=0, my=0, rx=0, ry=0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    (function animRing() {
+      rx += (mx - rx) * 0.11;
+      ry += (my - ry) * 0.11;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animRing);
+    })();
+
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), 60); });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    reveals.forEach(r => obs.observe(r));
+
+    const navAs = document.querySelectorAll('.nav-links a');
+    const secs = document.querySelectorAll('section[id]');
+    const navObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navAs.forEach(a => a.classList.remove('active'));
+          const a = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+          if (a) a.classList.add('active');
+        }
+      });
+    }, { threshold: 0.45 });
+    secs.forEach(s => navObs.observe(s));
+  </script>
 
 </body>
 </html>
