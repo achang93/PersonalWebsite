@@ -2,7 +2,13 @@
   'use strict';
 
   // Keep the entire portfolio readable when JavaScript is unavailable.
-  document.documentElement.classList.add('js');
+  const root = document.documentElement;
+  root.classList.add('js');
+  root.dataset.input = 'pointer';
+  document.addEventListener('keydown', event => {
+    if (['Tab', 'Enter', ' ', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) root.dataset.input = 'keyboard';
+  }, true);
+  document.addEventListener('pointerdown', () => { root.dataset.input = 'pointer'; }, { passive: true });
   const menuButton = document.querySelector('.menu-toggle');
   const menu = document.querySelector('.nav-links');
   const mobileQuery = window.matchMedia('(max-width: 700px)');
@@ -85,6 +91,7 @@
 
   document.getElementById('year').textContent = new Date().getFullYear();
   const copyButton = document.querySelector('.copy-email');
+  const copyLabel = copyButton.querySelector('.copy-label');
   const copyStatus = document.querySelector('.copy-status');
   if (navigator.clipboard && window.isSecureContext) {
     copyButton.hidden = false;
@@ -94,13 +101,17 @@
         await navigator.clipboard.writeText('albertchang96@gmail.com');
         clearTimeout(resetCopy);
         copyStatus.textContent = 'Email address copied to clipboard.';
-        copyButton.firstChild.textContent = 'Copied! ';
+        copyLabel.textContent = 'Copied';
+        copyButton.classList.add('is-copied');
         resetCopy = setTimeout(() => {
-          copyButton.firstChild.textContent = 'Copy email ';
+          copyLabel.textContent = 'Copy email';
+          copyButton.classList.remove('is-copied');
           copyStatus.textContent = '';
         }, 2500);
       } catch {
-        copyButton.firstChild.textContent = 'Copy unavailable ';
+        clearTimeout(resetCopy);
+        copyButton.classList.remove('is-copied');
+        copyLabel.textContent = 'Copy unavailable';
         copyStatus.textContent = 'Could not copy. Use the email address below or the Say hello link.';
       }
     });
@@ -169,15 +180,8 @@
   const revealed = new WeakSet();
   let revealObserver;
 
-  // Once a divider has shimmered, filtering never restarts its animation.
-  document.addEventListener('animationend', event => {
-    if (event.animationName === 'rule-scan' && event.target.matches('.project-card, .skill-group')) {
-      event.target.classList.add('signal-complete');
-    }
-  });
-
   // Short, per-row delays keep each group cohesive without slowing navigation.
-  ['.proof-band', '.projects-grid', '.skill-groups'].forEach(selector => {
+  ['.proof-band', '.skill-groups'].forEach(selector => {
     const group = document.querySelector(selector);
     const columns = selector === '.skill-groups' ? 3 : 2;
     [...group.children].forEach((target, index) => {
